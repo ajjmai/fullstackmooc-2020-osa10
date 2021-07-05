@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'nowrap',
     justifyContent: 'flex-start',
-    alignContent: 'flex-start',
     alignItems: 'center',
   },
 });
