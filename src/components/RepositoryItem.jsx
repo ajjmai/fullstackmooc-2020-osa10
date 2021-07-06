@@ -5,33 +5,37 @@ import theme from '../theme';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.colors.background,
   },
   flexRowContainer: {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'nowrap',
     alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   justifyCenter: {
     justifyContent: 'space-around',
-  },
-  justifyStart: {
-    justifyContent: 'flex-start',
   },
   flexColumnContainer: {
     display: 'flex',
     flexDirection: 'column',
     padding: 10,
-    justifyContent: 'space-between',
   },
-  flexItem: {
+  infoText: {
+    marginTop: 5,
+    alignSelf: 'flex-start',
+  },
+  statsItem: {
     alignSelf: 'center',
+    paddingBottom: 5,
   },
   tag: {
     backgroundColor: theme.colors.primary,
     alignSelf: 'flex-start',
     padding: 5,
+    borderRadius: 3,
+    marginVertical: 5,
   },
   avatar: {
     width: 50,
@@ -46,10 +50,10 @@ const StatsItem = ({ statsCount, statsName }) => {
 
   return (
     <View style={styles.flexColumnContainer}>
-      <Text style={styles.flexItem} fontWeight="bold">
+      <Text style={styles.statsItem} fontWeight="bold">
         {count}
       </Text>
-      <Text style={styles.flexItem} color="textSecondary">
+      <Text style={styles.statsItem} color="textSecondary">
         {statsName}
       </Text>
     </View>
@@ -59,18 +63,18 @@ const StatsItem = ({ statsCount, statsName }) => {
 const RepositoryItem = ({ repository }) => {
   return (
     <View style={styles.container}>
-      <View style={[styles.flexRowContainer, styles.justifyStart]}>
+      <View style={styles.flexRowContainer}>
         <Image style={styles.avatar} source={{ uri: repository.ownerAvatarUrl }} />
         <View style={styles.flexColumnContainer}>
-          <Text fontSize="subheading" fontWeight="bold">
+          <Text style={styles.infoText} fontSize="subheading" fontWeight="bold">
             {repository.fullName}
           </Text>
-          <Text fontSize="subheading" color="textSecondary">
+          <Text style={styles.infoText} fontSize="subheading" color="textSecondary">
             {repository.description}
           </Text>
-          <Text style={styles.tag} color="textTertiary">
-            {repository.language}
-          </Text>
+          <View style={styles.tag}>
+            <Text color="textWhite">{repository.language}</Text>
+          </View>
         </View>
       </View>
       <View style={[styles.flexRowContainer, styles.justifyCenter]}>

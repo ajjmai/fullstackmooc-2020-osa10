@@ -13,7 +13,7 @@ const AppBarTab = ({ url, tabName }) => {
   return (
     <Pressable style={styles.container}>
       <Link to={url}>
-        <Text color="textTertiary" fontWeight="bold">
+        <Text color="textWhite" fontWeight="bold">
           {tabName}
         </Text>
       </Link>
