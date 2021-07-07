@@ -61,27 +61,30 @@ const StatsItem = ({ statsCount, statsName }) => {
 };
 
 const RepositoryItem = ({ repository }) => {
+  const { fullName, description, language, forksCount, stargazersCount, ratingAverage, reviewCount, ownerAvatarUrl } =
+    repository;
+
   return (
     <View style={styles.container}>
       <View style={styles.flexRowContainer}>
-        <Image style={styles.avatar} source={{ uri: repository.ownerAvatarUrl }} />
+        <Image style={styles.avatar} source={{ uri: ownerAvatarUrl }} />
         <View style={styles.flexColumnContainer}>
           <Text style={styles.infoText} fontSize="subheading" fontWeight="bold">
-            {repository.fullName}
+            {fullName}
           </Text>
           <Text style={styles.infoText} fontSize="subheading" color="textSecondary">
-            {repository.description}
+            {description}
           </Text>
           <View style={styles.tag}>
-            <Text color="textWhite">{repository.language}</Text>
+            <Text color="textWhite">{language}</Text>
           </View>
         </View>
       </View>
       <View style={[styles.flexRowContainer, styles.justifyCenter]}>
-        <StatsItem statsName="Stars" statsCount={repository.stargazersCount} />
-        <StatsItem statsName="Forks" statsCount={repository.forksCount} />
-        <StatsItem statsName="Reviews" statsCount={repository.reviewCount} />
-        <StatsItem statsName="Rating" statsCount={repository.ratingAverage} />
+        <StatsItem statsName="Stars" statsCount={stargazersCount} />
+        <StatsItem statsName="Forks" statsCount={forksCount} />
+        <StatsItem statsName="Reviews" statsCount={reviewCount} />
+        <StatsItem statsName="Rating" statsCount={ratingAverage} />
       </View>
     </View>
   );
