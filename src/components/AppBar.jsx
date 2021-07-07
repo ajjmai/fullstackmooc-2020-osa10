@@ -1,8 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { Pressable, View, StyleSheet, ScrollView } from 'react-native';
+import { Link } from 'react-router-native';
 import Constants from 'expo-constants';
 import theme from '../theme';
-import AppBarTab from './AppBarTab';
+import useAuthUser from '../hooks/useAuthUser';
+import useSignOut from '../hooks/useSignOut';
+import Text from './Text';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,14 +18,47 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
+  tabContainer: {
+    padding: 10,
+  },
 });
 
+const SignOutTab = () => {
+  const signOut = useSignOut();
+
+  const onSignOut = async () => {
+    await signOut();
+  };
+
+  return (
+    <Pressable onPress={onSignOut} style={styles.tabContainer}>
+      <Text color="textWhite" fontWeight="bold">
+        Sign out
+      </Text>
+    </Pressable>
+  );
+};
+
+const AppBarTab = ({ url, children }) => {
+  return (
+    <Pressable style={styles.tabContainer}>
+      <Link to={url}>
+        <Text color="textWhite" fontWeight="bold">
+          {children}
+        </Text>
+      </Link>
+    </Pressable>
+  );
+};
+
 const AppBar = () => {
+  const { authorizedUser } = useAuthUser();
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
-        <AppBarTab url="/" tabName="Repositories" />
-        <AppBarTab url="signin" tabName="Sign in" />
+        <AppBarTab url="/">Repositories</AppBarTab>
+        {authorizedUser ? <SignOutTab /> : <AppBarTab url="signin">Sign in</AppBarTab>}
       </ScrollView>
     </View>
   );
