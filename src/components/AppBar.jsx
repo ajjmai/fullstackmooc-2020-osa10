@@ -10,20 +10,37 @@ import Text from './Text';
 const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight,
-    height: 130,
     backgroundColor: theme.colors.appBarBackground,
-    display: 'flex',
+  },
+  scrollView: {
     flexDirection: 'row',
-    flexWrap: 'nowrap',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+  },
+  tabTouchable: {
+    flexGrow: 0,
   },
   tabContainer: {
-    padding: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
-const SignOutTab = () => {
+const AppBarTab = ({ children, ...props }) => {
+  return (
+    <Pressable style={styles.tabTouchable} {...props}>
+      <View style={styles.tabContainer}>
+        <Text color="textWhite" fontWeight="bold">
+          {children}
+        </Text>
+      </View>
+    </Pressable>
+  );
+};
+
+const AppBar = () => {
+  const { authorizedUser } = useAuthUser();
   const signOut = useSignOut();
 
   const onSignOut = async () => {
@@ -31,34 +48,18 @@ const SignOutTab = () => {
   };
 
   return (
-    <Pressable onPress={onSignOut} style={styles.tabContainer}>
-      <Text color="textWhite" fontWeight="bold">
-        Sign out
-      </Text>
-    </Pressable>
-  );
-};
-
-const AppBarTab = ({ url, children }) => {
-  return (
-    <Pressable style={styles.tabContainer}>
-      <Link to={url}>
-        <Text color="textWhite" fontWeight="bold">
-          {children}
-        </Text>
-      </Link>
-    </Pressable>
-  );
-};
-
-const AppBar = () => {
-  const { authorizedUser } = useAuthUser();
-
-  return (
     <View style={styles.container}>
       <ScrollView horizontal>
-        <AppBarTab url="/">Repositories</AppBarTab>
-        {authorizedUser ? <SignOutTab /> : <AppBarTab url="signin">Sign in</AppBarTab>}
+        <Link to="/" component={AppBarTab}>
+          Repositories
+        </Link>
+        {authorizedUser ? (
+          <AppBarTab onPress={onSignOut}>Sign out</AppBarTab>
+        ) : (
+          <Link to="/sign-in" component={AppBarTab}>
+            Sign in
+          </Link>
+        )}
       </ScrollView>
     </View>
   );

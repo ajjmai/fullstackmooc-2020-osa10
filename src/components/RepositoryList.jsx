@@ -22,7 +22,6 @@ const RepositoryList = () => {
       ItemSeparatorComponent={ItemSeparator}
       renderItem={({ item }) => <RepositoryItem repository={item} />}
       keyExtractor={(item) => item.id}
-      // other props
     />
   );
 };

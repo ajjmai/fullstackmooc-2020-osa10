@@ -9,9 +9,9 @@ import theme from '../theme';
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: theme.colors.mainBackground,
     flexGrow: 1,
     flexShrink: 1,
-    backgroundColor: theme.colors.mainBackground,
   },
 });
 
@@ -23,7 +23,7 @@ const Main = () => {
         <Route path="/" exact>
           <RepositoryList />
         </Route>
-        <Route path="/signin" exact>
+        <Route path="/sign-in" exact>
           <SignIn />
         </Route>
         <Redirect to="/" />

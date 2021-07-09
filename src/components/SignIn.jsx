@@ -1,26 +1,19 @@
 import React from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import FormikTextInput from './FormikTextInput';
-import Text from './Text';
+import Button from './Button';
 import theme from '../theme';
 import useSignIn from '../hooks/useSignIn';
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.background,
-    padding: 20,
+    padding: 15,
   },
-  button: {
-    backgroundColor: theme.colors.primary,
-    height: 50,
-    borderRadius: 3,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 10,
+  fieldContainer: {
+    marginBottom: 15,
   },
 });
 
@@ -34,16 +27,16 @@ const validationSchema = yup.object().shape({
   password: yup.string().required('Password is required'),
 });
 
-const SignInForm = ({ handleSubmit }) => {
+const SignInForm = ({ onSubmit }) => {
   return (
     <View style={styles.container}>
-      <FormikTextInput name="username" placeholder="Username" />
-      <FormikTextInput name="password" placeholder="Password" secureTextEntry />
-      <Pressable style={styles.button} onPress={handleSubmit}>
-        <Text fontWeight="bold" color="textWhite">
-          Sign in
-        </Text>
-      </Pressable>
+      <View style={styles.fieldContainer}>
+        <FormikTextInput name="username" placeholder="Username" />
+      </View>
+      <View style={styles.fieldContainer}>
+        <FormikTextInput name="password" placeholder="Password" secureTextEntry />
+      </View>
+      <Button onPress={onSubmit}>Sign in</Button>
     </View>
   );
 };
@@ -63,7 +56,7 @@ const SignIn = () => {
 
   return (
     <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-      {({ handleSubmit }) => <SignInForm handleSubmit={handleSubmit} />}
+      {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
     </Formik>
   );
 };

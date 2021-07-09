@@ -2,20 +2,24 @@ import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import Text from './Text';
 import theme from '../theme';
+import formatInThousands from '../utils/formatInThousands';
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.background,
+    padding: 15,
   },
-  flexRowContainer: {
-    display: 'flex',
+  topContainer: {
     flexDirection: 'row',
-    flexWrap: 'nowrap',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    marginBottom: 15,
   },
-  justifyCenter: {
+  bottomContainer: {
+    flexDirection: 'row',
     justifyContent: 'space-around',
+  },
+  contentContainer: {
+    flexGrow: 1,
+    flexShrink: 1,
   },
   flexColumnContainer: {
     display: 'flex',
@@ -28,34 +32,42 @@ const styles = StyleSheet.create({
   },
   statsItem: {
     alignSelf: 'center',
-    paddingBottom: 5,
+    flexGrow: 0,
+    justifyContent: 'center',
+    paddingHorizontal: 15,
   },
-  tag: {
+  statsItemCount: {
+    marginBottom: 5,
+  },
+  languageContainer: {
+    marginTop: 10,
+    flexDirection: 'row',
+  },
+  languageText: {
     backgroundColor: theme.colors.primary,
-    alignSelf: 'flex-start',
-    padding: 5,
-    borderRadius: 3,
-    marginVertical: 5,
+    borderRadius: theme.roundness,
+    flexGrow: 0,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  avatarContainer: {
+    flexGrow: 0,
+    marginRight: 20,
   },
   avatar: {
     width: 50,
     height: 50,
-    marginLeft: 10,
-    borderRadius: 5,
+    borderRadius: theme.roundness,
   },
 });
 
-const StatsItem = ({ statsCount, statsName }) => {
-  const count = statsCount >= 1000 ? `${parseFloat((statsCount / 1000).toFixed(1))}k` : statsCount;
-
+const StatsItem = ({ count, label }) => {
   return (
-    <View style={styles.flexColumnContainer}>
-      <Text style={styles.statsItem} fontWeight="bold">
-        {count}
+    <View style={styles.statsItem}>
+      <Text style={styles.statsItemCount} fontWeight="bold">
+        {formatInThousands(count)}
       </Text>
-      <Text style={styles.statsItem} color="textSecondary">
-        {statsName}
-      </Text>
+      <Text color="textSecondary">{label}</Text>
     </View>
   );
 };
@@ -66,25 +78,31 @@ const RepositoryItem = ({ repository }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.flexRowContainer}>
-        <Image style={styles.avatar} source={{ uri: ownerAvatarUrl }} />
-        <View style={styles.flexColumnContainer}>
+      <View style={styles.topContainer}>
+        <View style={styles.avatarContainer}>
+          <Image style={styles.avatar} source={{ uri: ownerAvatarUrl }} />
+        </View>
+        <View style={styles.contentContainer}>
           <Text style={styles.infoText} fontSize="subheading" fontWeight="bold">
             {fullName}
           </Text>
           <Text style={styles.infoText} fontSize="subheading" color="textSecondary">
             {description}
           </Text>
-          <View style={styles.tag}>
-            <Text color="textWhite">{language}</Text>
-          </View>
+          {language ? (
+            <View style={styles.languageContainer}>
+              <Text style={styles.languageText} color="textWhite">
+                {language}
+              </Text>
+            </View>
+          ) : null}
         </View>
       </View>
-      <View style={[styles.flexRowContainer, styles.justifyCenter]}>
-        <StatsItem statsName="Stars" statsCount={stargazersCount} />
-        <StatsItem statsName="Forks" statsCount={forksCount} />
-        <StatsItem statsName="Reviews" statsCount={reviewCount} />
-        <StatsItem statsName="Rating" statsCount={ratingAverage} />
+      <View style={styles.bottomContainer}>
+        <StatsItem label="Stars" count={stargazersCount} />
+        <StatsItem label="Forks" count={forksCount} />
+        <StatsItem label="Reviews" count={reviewCount} />
+        <StatsItem label="Rating" count={ratingAverage} />
       </View>
     </View>
   );
