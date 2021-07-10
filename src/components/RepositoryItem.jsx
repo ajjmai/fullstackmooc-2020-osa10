@@ -61,10 +61,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const StatsItem = ({ count, label }) => {
+const StatsItem = ({ count, label, testID }) => {
   return (
     <View style={styles.statsItem}>
-      <Text style={styles.statsItemCount} fontWeight="bold">
+      <Text style={styles.statsItemCount} fontWeight="bold" testID={testID}>
         {formatInThousands(count)}
       </Text>
       <Text color="textSecondary">{label}</Text>
@@ -83,15 +83,15 @@ const RepositoryItem = ({ repository }) => {
           <Image style={styles.avatar} source={{ uri: ownerAvatarUrl }} />
         </View>
         <View style={styles.contentContainer}>
-          <Text style={styles.infoText} fontSize="subheading" fontWeight="bold">
+          <Text style={styles.infoText} fontSize="subheading" fontWeight="bold" testID="repositoryName">
             {fullName}
           </Text>
-          <Text style={styles.infoText} fontSize="subheading" color="textSecondary">
+          <Text style={styles.infoText} fontSize="subheading" color="textSecondary" testID="repositoryDescription">
             {description}
           </Text>
           {language ? (
             <View style={styles.languageContainer}>
-              <Text style={styles.languageText} color="textWhite">
+              <Text style={styles.languageText} color="textWhite" testID="repositoryLanguage">
                 {language}
               </Text>
             </View>
@@ -99,10 +99,10 @@ const RepositoryItem = ({ repository }) => {
         </View>
       </View>
       <View style={styles.bottomContainer}>
-        <StatsItem label="Stars" count={stargazersCount} />
-        <StatsItem label="Forks" count={forksCount} />
-        <StatsItem label="Reviews" count={reviewCount} />
-        <StatsItem label="Rating" count={ratingAverage} />
+        <StatsItem label="Stars" count={stargazersCount} testID="stargazersCount" />
+        <StatsItem label="Forks" count={forksCount} testID="forksCount" />
+        <StatsItem label="Reviews" count={reviewCount} testID="reviewCount" />
+        <StatsItem label="Rating" count={ratingAverage} testID="ratingAverage" />
       </View>
     </View>
   );
