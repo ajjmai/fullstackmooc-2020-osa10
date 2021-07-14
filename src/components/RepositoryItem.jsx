@@ -25,11 +25,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
   },
-  flexColumnContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    padding: 10,
-  },
   infoText: {
     marginTop: 5,
     alignSelf: 'flex-start',

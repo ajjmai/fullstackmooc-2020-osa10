@@ -1,7 +1,30 @@
 import { gql } from '@apollo/client';
 
+export const GET_REVIEWS = gql`
+  query reviews($id: ID!) {
+    repository(id: $id) {
+      id
+      fullName
+      reviews {
+        edges {
+          node {
+            id
+            text
+            rating
+            createdAt
+            user {
+              id
+              username
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const GET_REPOSITORY = gql`
-  query get_repository($id: ID!) {
+  query repository($id: ID!) {
     repository(id: $id) {
       id
       fullName
