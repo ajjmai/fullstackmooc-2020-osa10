@@ -8,7 +8,7 @@ const useSignIn = () => {
   const authStorage = useAuthStorage();
   const apolloClient = useApolloClient();
   const [mutate, result] = useMutation(AUTHORIZE);
-  let history = useHistory();
+  const history = useHistory();
 
   const signIn = async ({ username, password }) => {
     const { data } = await mutate({ variables: { username, password } });
