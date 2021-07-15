@@ -24,7 +24,7 @@ export const GET_REVIEWS = gql`
 `;
 
 export const GET_REPOSITORY = gql`
-  query repository($id: ID!) {
+  query ($id: ID!) {
     repository(id: $id) {
       id
       fullName
@@ -41,8 +41,8 @@ export const GET_REPOSITORY = gql`
 `;
 
 export const GET_REPOSITORIES = gql`
-  query {
-    repositories {
+  query ($orderDirection: OrderDirection, $orderBy: AllRepositoriesOrderBy) {
+    repositories(orderDirection: $orderDirection, orderBy: $orderBy) {
       edges {
         node {
           id
