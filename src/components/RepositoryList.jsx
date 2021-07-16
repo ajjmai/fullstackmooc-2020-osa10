@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { Searchbar } from 'react-native-paper';
+import { useDebounce } from 'use-debounce';
 
 import RepositoryItem from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
@@ -11,9 +13,14 @@ const styles = StyleSheet.create({
   picker: {
     height: 50,
     backgroundColor: theme.colors.mainBackground,
-    paddingLeft: 10,
+    paddingLeft: 20,
+    marginBottom: 10,
     fontSize: theme.fontSizes.body,
     fontFamily: theme.fonts.main,
+    borderWidth: 0,
+  },
+  searchContainer: {
+    margin: 10,
   },
 });
 
@@ -33,29 +40,63 @@ const SortRepositoryPicker = ({ selectedOrder, setSelectedOrder }) => {
   );
 };
 
-export const RepositoryListContainer = ({ repositories, ...props }) => {
-  const repositoryNodes = repositories ? repositories.edges.map((edge) => edge.node) : [];
+const FilterRepositoriesField = ({ searchKeyword, setSearchkeyword }) => {
+  const onChangeSearch = (query) => setSearchkeyword(query);
 
   return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RepositoryItem repository={item} />}
-      keyExtractor={({ id }) => id}
-      ListHeaderComponent={<SortRepositoryPicker {...props} />}
+    <Searchbar
+      style={styles.searchContainer}
+      placeholder="Filter"
+      onChangeText={onChangeSearch}
+      value={searchKeyword}
     />
   );
 };
 
+const RepositoryListHeader = ({ selectedOrder, setSelectedOrder, searchKeyword, setSearchkeyword }) => {
+  return (
+    <>
+      <FilterRepositoriesField searchKeyword={searchKeyword} setSearchkeyword={setSearchkeyword} />
+      <SortRepositoryPicker selectedOrder={selectedOrder} setSelectedOrder={setSelectedOrder} />
+    </>
+  );
+};
+
+export class RepositoryListContainer extends React.Component {
+  renderHeader = () => {
+    const props = this.props;
+
+    return <RepositoryListHeader {...props} />;
+  };
+
+  render() {
+    return (
+      <FlatList
+        data={this.props.repositories}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={({ item }) => <RepositoryItem repository={item} />}
+        keyExtractor={({ id }) => id}
+        ListHeaderComponent={this.renderHeader}
+      />
+    );
+  }
+}
+
 const RepositoryList = () => {
   const [selectedOrder, setSelectedOrder] = useState();
-  const { repositories } = useRepositories(selectedOrder);
+  const [searchKeyword, setSearchkeyword] = useState();
+  const [debouncedSearchKeyword] = useDebounce(searchKeyword, 500);
+  const { repositories } = useRepositories(selectedOrder, debouncedSearchKeyword);
+
+  const repositoryNodes = repositories ? repositories.edges.map((edge) => edge.node) : [];
 
   return (
     <RepositoryListContainer
-      repositories={repositories}
+      repositories={repositoryNodes}
       selectedOrder={selectedOrder}
       setSelectedOrder={setSelectedOrder}
+      searchKeyword={searchKeyword}
+      setSearchkeyword={setSearchkeyword}
     />
   );
 };
