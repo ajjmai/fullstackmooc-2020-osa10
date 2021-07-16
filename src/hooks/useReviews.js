@@ -2,10 +2,29 @@ import { useQuery } from '@apollo/client';
 import { GET_REVIEWS } from '../graphql/queries';
 
 const useReviews = (id) => {
-  // eslint-disable-next-line no-unused-vars
-  const { data, error, loading } = useQuery(GET_REVIEWS, { variables: { id }, fetchPolicy: 'cache-and-network' });
+  const queryVariables = { id, first: 4 };
 
-  return { reviews: data ? data.repository.reviews : undefined, loading };
+  const { data, loading, fetchMore, ...result } = useQuery(GET_REVIEWS, {
+    variables: queryVariables,
+    fetchPolicy: 'cache-and-network',
+  });
+
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repository.reviews.pageInfo.hasNextPage;
+
+    if (!canFetchMore) {
+      return;
+    }
+
+    fetchMore({
+      variables: {
+        after: data.repositories.pageInfo.endCursor,
+        ...queryVariables,
+      },
+    });
+  };
+
+  return { reviews: data?.repository.reviews, fetchMore: handleFetchMore, loading, ...result };
 };
 
 export default useReviews;

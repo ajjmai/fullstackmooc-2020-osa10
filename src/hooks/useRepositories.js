@@ -18,13 +18,29 @@ const useRepositories = (selectedOrder, keyword) => {
     searchKeyword = keyword;
   }
 
-  // eslint-disable-next-line no-unused-vars
-  const { data, error, loading } = useQuery(GET_REPOSITORIES, {
-    variables: { orderDirection, orderBy, searchKeyword },
+  const queryVariables = { orderBy, searchKeyword, orderDirection, first: 8 };
+
+  const { data, loading, fetchMore, ...result } = useQuery(GET_REPOSITORIES, {
+    variables: queryVariables,
     fetchPolicy: 'cache-and-network',
   });
 
-  return { repositories: data ? data.repositories : undefined, loading };
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
+
+    if (!canFetchMore) {
+      return;
+    }
+
+    fetchMore({
+      variables: {
+        after: data.repositories.pageInfo.endCursor,
+        ...queryVariables,
+      },
+    });
+  };
+
+  return { repositories: data?.repositories, fetchMore: handleFetchMore, loading, ...result };
 };
 
 export default useRepositories;

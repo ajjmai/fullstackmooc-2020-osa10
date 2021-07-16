@@ -77,18 +77,25 @@ export class RepositoryListContainer extends React.Component {
         renderItem={({ item }) => <RepositoryItem repository={item} />}
         keyExtractor={({ id }) => id}
         ListHeaderComponent={this.renderHeader}
+        onEndReached={this.props.onEndReach}
+        onEndReachedThreshold={0.5}
       />
     );
   }
 }
 
 const RepositoryList = () => {
-  const [selectedOrder, setSelectedOrder] = useState();
+  const [selectedOrder, setSelectedOrder] = useState('CREATED_AT');
   const [searchKeyword, setSearchkeyword] = useState();
   const [debouncedSearchKeyword] = useDebounce(searchKeyword, 500);
-  const { repositories } = useRepositories(selectedOrder, debouncedSearchKeyword);
+  const { repositories, fetchMore } = useRepositories(selectedOrder, debouncedSearchKeyword);
 
   const repositoryNodes = repositories ? repositories.edges.map((edge) => edge.node) : [];
+
+  const onEndReach = () => {
+    console.log('fetch more');
+    fetchMore();
+  };
 
   return (
     <RepositoryListContainer
@@ -97,6 +104,7 @@ const RepositoryList = () => {
       setSelectedOrder={setSelectedOrder}
       searchKeyword={searchKeyword}
       setSearchkeyword={setSearchkeyword}
+      onEndReach={onEndReach}
     />
   );
 };
