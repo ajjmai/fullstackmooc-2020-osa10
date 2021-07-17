@@ -1,11 +1,13 @@
 import { useQuery } from '@apollo/client';
 import { GET_AUTHORIZED_USER } from '../graphql/queries';
 
-const useAuthUser = () => {
-  // eslint-disable-next-line no-unused-vars
-  const { data, error, loading } = useQuery(GET_AUTHORIZED_USER, { fetchPolicy: 'cache-and-network' });
+const useAuthUser = (includeReviews = false) => {
+  const { data, loading } = useQuery(GET_AUTHORIZED_USER, {
+    variables: { includeReviews },
+    fetchPolicy: 'cache-and-network',
+  });
 
-  return { authorizedUser: data ? data.authorizedUser : undefined, loading };
+  return { authorizedUser: data?.authorizedUser, loading };
 };
 
 export default useAuthUser;

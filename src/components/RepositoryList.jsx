@@ -93,7 +93,6 @@ const RepositoryList = () => {
   const repositoryNodes = repositories ? repositories.edges.map((edge) => edge.node) : [];
 
   const onEndReach = () => {
-    console.log('fetch more');
     fetchMore();
   };
 
