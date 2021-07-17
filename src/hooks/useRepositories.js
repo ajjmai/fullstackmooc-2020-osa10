@@ -26,7 +26,7 @@ const useRepositories = (selectedOrder, keyword) => {
   });
 
   const handleFetchMore = () => {
-    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
+    const canFetchMore = !loading && data && data.repositories.pageInfo.hasNextPage;
 
     if (!canFetchMore) {
       return;

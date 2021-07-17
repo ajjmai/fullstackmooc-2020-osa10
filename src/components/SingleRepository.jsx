@@ -26,7 +26,6 @@ const SingleRepository = () => {
   if (!repository) return null;
 
   const onEndReach = () => {
-    console.log('fetch more');
     fetchMore();
   };
 

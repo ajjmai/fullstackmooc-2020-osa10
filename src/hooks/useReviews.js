@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { GET_REVIEWS } from '../graphql/queries';
 
 const useReviews = (id) => {
-  const queryVariables = { id, first: 4 };
+  const queryVariables = { id, first: 5 };
 
   const { data, loading, fetchMore, ...result } = useQuery(GET_REVIEWS, {
     variables: queryVariables,
@@ -10,7 +10,7 @@ const useReviews = (id) => {
   });
 
   const handleFetchMore = () => {
-    const canFetchMore = !loading && data?.repository.reviews.pageInfo.hasNextPage;
+    const canFetchMore = !loading && data && data?.repository.reviews.pageInfo.hasNextPage;
 
     if (!canFetchMore) {
       return;
